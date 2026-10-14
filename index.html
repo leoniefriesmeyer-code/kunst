@@ -7,22 +7,21 @@
 <meta name="description" content="Werke von Leo Fries Meyer – Titel, Technik, Format und Preis. Anfragen direkt per E-Mail.">
 <style>
   :root {
-    --bg: #faf8f5; --ink: #1f1d1b; --muted: #6f6a64; --line: #e6e1da; --accent: #1f1d1b; --soft: #f1ede7;
+    --bg: #faf8f5; --ink: #1f1d1b; --muted: #6f6a64; --line: #e6e1da; --accent: #1f1d1b; --soft: #f1ede7; --name: #1c2f5a; --title: #2340c4;
     --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #161514; --ink: #f1ede7; --muted: #a8a29a; --line: #34312e; --accent: #f1ede7; --soft: #221f1d; }
+    :root { --bg: #161514; --ink: #f1ede7; --muted: #a8a29a; --line: #34312e; --accent: #f1ede7; --soft: #221f1d; --name: #a9bfe8; --title: #8ea6ff; }
   }
   * { box-sizing: border-box; }
   html { background: var(--bg); }
   body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
   .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
   header { padding: 56px 0 28px; text-align: center; }
-  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 8vw, 3.2rem); letter-spacing: .01em; margin: 0; }
-  .sub { color: var(--muted); margin: 8px 0 0; font-size: .95rem; letter-spacing: .04em; }
-  nav.index { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 22px 0 0; font-size: .9rem; }
-  nav.index a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+  h1 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(2.3rem, 9vw, 3.6rem); line-height: 1.1; letter-spacing: .005em; margin: 0; color: var(--title); white-space: pre-line; }
+  .name { font-family: var(--serif); font-size: clamp(1.25rem, 4.6vw, 1.6rem); color: var(--name); margin: 18px 0 0; }
+  .sub { color: var(--muted); margin: 6px 0 0; font-size: .95rem; letter-spacing: .04em; }
   .werk { padding: 40px 0; border-top: 1px solid var(--line); scroll-margin-top: 12px; }
   .bild { width: 100%; background: var(--soft); border-radius: 4px; overflow: hidden; }
   .bild img { display: block; width: 100%; height: auto; }
@@ -49,9 +48,9 @@
 <body>
 <div class="wrap">
   <header>
-    <h1 id="name"></h1>
+    <h1 id="ausstellung"></h1>
+    <p class="name" id="name"></p>
     <p class="sub" id="untertitel"></p>
-    <nav class="index" id="index" aria-label="Werke"></nav>
   </header>
   <main id="werke"></main>
   <section class="kontakt" id="anfrage">
@@ -75,13 +74,13 @@
     var esc = function (s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
     var mail = function (betreff) { return 'mailto:' + K.email + '?subject=' + encodeURIComponent(betreff) + '&body=' + encodeURIComponent('Hallo Leo,\n\n'); };
     document.getElementById('name').textContent = K.name;
+    document.getElementById('ausstellung').textContent = (K.ausstellung || '').replace(', ', ',\n');
     document.getElementById('untertitel').textContent = K.untertitel;
     document.title = K.name + ' – Werke';
-    var html = '', idx = '';
+    var html = '';
     W.forEach(function (w) {
       var details = [w.technik, w.format, w.jahr].filter(Boolean).join(' · ');
       var status = w.status ? '<span class="status ' + esc(w.status) + '">' + esc(w.status) + '</span>' : '';
-      idx += '<a href="#werk-' + w.nr + '">' + w.nr + ' ' + esc(w.titel) + '</a>';
       html += '<article class="werk" id="werk-' + w.nr + '">' +
         '<div class="bild"><img src="' + esc(w.bild) + '" alt="' + esc(w.titel) + ' – ' + esc(K.name) + '" loading="lazy" onerror="this.outerHTML=\'<div class=platzhalter>Foto folgt</div>\'"></div>' +
         '<div class="info"><span class="nr">Nr. ' + w.nr + '</span><h2>' + esc(w.titel) + status + '</h2>' +
@@ -91,7 +90,6 @@
         '</article>';
     });
     document.getElementById('werke').innerHTML = html;
-    document.getElementById('index').innerHTML = idx;
     document.getElementById('mailbtn').href = mail('Anfrage – ' + K.name);
     var mt = document.getElementById('mailtext'); mt.href = 'mailto:' + K.email; mt.textContent = K.email;
     document.getElementById('impmail').textContent = K.email;
