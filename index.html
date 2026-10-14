@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Different Days, Same Life – Leo Fries Meyer</title>
+<meta name="description" content="Werke von Leo Fries Meyer – Titel, Technik, Format und Preis. Anfragen direkt per E-Mail.">
+<style>
+  :root {
+    --bg: #faf8f5; --ink: #1f1d1b; --muted: #6f6a64; --line: #e6e1da; --accent: #1f1d1b; --soft: #f1ede7;
+    --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #161514; --ink: #f1ede7; --muted: #a8a29a; --line: #34312e; --accent: #f1ede7; --soft: #221f1d; }
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  header { padding: 56px 0 28px; text-align: center; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 8vw, 3.2rem); letter-spacing: .01em; margin: 0; }
+  .sub { color: var(--muted); margin: 8px 0 0; font-size: .95rem; letter-spacing: .04em; }
+  nav.index { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 22px 0 0; font-size: .9rem; }
+  nav.index a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .werk { padding: 40px 0; border-top: 1px solid var(--line); scroll-margin-top: 12px; }
+  .bild { width: 100%; background: var(--soft); border-radius: 4px; overflow: hidden; }
+  .bild img { display: block; width: 100%; height: auto; }
+  .bild .platzhalter { aspect-ratio: 4 / 5; display: grid; place-items: center; color: var(--muted); font-size: .9rem; }
+  .info { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; margin-top: 18px; align-items: baseline; }
+  .nr { grid-column: 1 / -1; color: var(--muted); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 1.7rem; margin: 0; line-height: 1.2; }
+  .preis { font-size: 1.1rem; white-space: nowrap; }
+  .details { grid-column: 1 / -1; color: var(--muted); margin: 2px 0 0; }
+  .status { display: inline-block; font-size: .8rem; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; margin-left: 6px; vertical-align: 2px; }
+  .status.verkauft { color: #b0412e; } .status.reserviert { color: #9a6a12; }
+  .anfragen { display: inline-block; margin-top: 14px; color: var(--ink); font-size: .95rem; }
+  .kontakt { padding: 48px 0 40px; border-top: 1px solid var(--line); text-align: center; }
+  .kontakt h2 { margin-bottom: 10px; }
+  .kontakt p { color: var(--muted); margin: 0 auto 22px; max-width: 480px; }
+  .btn { display: inline-block; background: var(--accent); color: var(--bg); text-decoration: none; padding: 14px 26px; border-radius: 999px; font-weight: 600; }
+  .mail { display: block; margin-top: 16px; color: var(--ink); }
+  .ig { display: inline-block; margin-top: 10px; color: var(--muted); }
+  footer { border-top: 1px solid var(--line); padding: 26px 0 48px; color: var(--muted); font-size: .8rem; }
+  footer h3 { font-size: .8rem; margin: 0 0 4px; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; }
+  footer p { margin: 0 0 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="name"></h1>
+    <p class="sub" id="untertitel"></p>
+    <nav class="index" id="index" aria-label="Werke"></nav>
+  </header>
+  <main id="werke"></main>
+  <section class="kontakt" id="anfrage">
+    <h2>Anfrage</h2>
+    <p>Du interessierst dich für ein Werk oder möchtest mehr erfahren? Schreib mir gern – ich melde mich schnell zurück.</p>
+    <a class="btn" id="mailbtn" href="#">Anfrage per E-Mail</a>
+    <a class="mail" id="mailtext" href="#"></a>
+    <span id="iglink"></span>
+  </section>
+  <footer>
+    <h3>Impressum</h3>
+    <p>Leonie Meyer · Schellingstraße 91 · 80799 München<br><span id="impmail"></span></p>
+    <h3>Datenschutz</h3>
+    <p>Diese Seite setzt keine Cookies und nutzt keine Analyse- oder Tracking-Dienste. Sie wird über GitHub Pages (GitHub Inc., USA) ausgeliefert; dabei verarbeitet GitHub technisch notwendige Daten wie die IP-Adresse. Wenn du mir eine E-Mail schreibst, verwende ich deine Angaben nur, um deine Anfrage zu beantworten.</p>
+  </footer>
+</div>
+<script src="werke.js"></script>
+<script>
+  (function () {
+    var K = window.KUENSTLERIN, W = window.WERKE;
+    var esc = function (s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var mail = function (betreff) { return 'mailto:' + K.email + '?subject=' + encodeURIComponent(betreff) + '&body=' + encodeURIComponent('Hallo Leo,\n\n'); };
+    document.getElementById('name').textContent = K.name;
+    document.getElementById('untertitel').textContent = K.untertitel;
+    document.title = K.name + ' – Werke';
+    var html = '', idx = '';
+    W.forEach(function (w) {
+      var details = [w.technik, w.format, w.jahr].filter(Boolean).join(' · ');
+      var status = w.status ? '<span class="status ' + esc(w.status) + '">' + esc(w.status) + '</span>' : '';
+      idx += '<a href="#werk-' + w.nr + '">' + w.nr + ' ' + esc(w.titel) + '</a>';
+      html += '<article class="werk" id="werk-' + w.nr + '">' +
+        '<div class="bild"><img src="' + esc(w.bild) + '" alt="' + esc(w.titel) + ' – ' + esc(K.name) + '" loading="lazy" onerror="this.outerHTML=\'<div class=platzhalter>Foto folgt</div>\'"></div>' +
+        '<div class="info"><span class="nr">Nr. ' + w.nr + '</span><h2>' + esc(w.titel) + status + '</h2>' +
+        '<span class="preis">' + esc(w.preis) + '</span>' +
+        (details ? '<p class="details">' + esc(details) + '</p>' : '') + '</div>' +
+        (w.status === 'verkauft' ? '' : '<a class="anfragen" href="' + mail('Anfrage zu Nr. ' + w.nr + ' „' + w.titel + '“') + '">Dieses Werk anfragen →</a>') +
+        '</article>';
+    });
+    document.getElementById('werke').innerHTML = html;
+    document.getElementById('index').innerHTML = idx;
+    document.getElementById('mailbtn').href = mail('Anfrage – ' + K.name);
+    var mt = document.getElementById('mailtext'); mt.href = 'mailto:' + K.email; mt.textContent = K.email;
+    document.getElementById('impmail').textContent = K.email;
+    if (K.instagram) document.getElementById('iglink').innerHTML = '<a class="ig" href="https://instagram.com/' + esc(K.instagram) + '">Instagram: @' + esc(K.instagram) + '</a>';
+  })();
+</script>
+</body>
+</html>
