@@ -11,7 +11,7 @@ window.KUENSTLERIN = {
 };
 
 window.WERKE = [
-  { nr: 1, titel: 'Ferien', technik: 'Acryl auf Leinwand', format: '100 × 85 cm', jahr: '2026', preis: '400 €', bild: 'bilder/02.jpg', status: '' },
-  { nr: 2, titel: 'Sommer', technik: 'Acryl auf Leinwand', format: '100 × 85 cm', jahr: '2026', preis: '400 €', bild: 'bilder/03.jpg', status: '' },
+  { nr: 1, titel: 'Fieber', technik: 'Acryl auf Leinwand', format: '100 × 85 cm', jahr: '2026', preis: '400 €', bild: 'bilder/02.jpg', status: '' },
+  { nr: 2, titel: 'Ferien', technik: 'Acryl auf Leinwand', format: '100 × 85 cm', jahr: '2026', preis: '400 €', bild: 'bilder/03.jpg', status: '' },
   { nr: 3, titel: 'Heimat', technik: 'Acryl auf Leinwand', format: '120 × 100 cm', jahr: '2026', preis: '550 €', bild: 'bilder/01.jpg', status: '' },
 ];
